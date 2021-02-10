@@ -5,7 +5,7 @@
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
 
-# This sshd was compiled with PATH=/usr/local/bin:/usr/bin
+# This sshd was compiled with PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 
 # The strategy used for options in the default sshd_config shipped with
 # OpenSSH is to specify options with their default value where
@@ -22,12 +22,17 @@
 #ListenAddress ::
 
 HostKey /etc/ssh/ssh_host_rsa_key
-#HostKey /etc/ssh/ssh_host_dsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 
 # Ciphers and keying
 #RekeyLimit default none
+
+# This system is following system-wide crypto policy. The changes to
+# crypto properties (Ciphers, MACs, ...) will not have any effect here.
+# They will be overridden by command-line options passed to the server
+# on command line.
+# Please, check manual pages for update-crypto-policies(8) and sshd_config(5).
 
 # Logging
 #SyslogFacility AUTH
@@ -105,7 +110,11 @@ X11Forwarding yes
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
-#PrintMotd yes
+
+# It is recommended to use pam_motd in /etc/pam.d/sshd instead of PrintMotd,
+# as it is more configurable and versatile than the built-in version.
+PrintMotd no
+
 #PrintLastLog yes
 #TCPKeepAlive yes
 #UseLogin no
@@ -115,7 +124,7 @@ X11Forwarding yes
 ClientAliveInterval {{ sshd_client_alive_interval }}  # Every minute confirm the client is still active
 ClientAliveCountMax {{ sshd_client_alive_count_max }}   # After 5 minutes of no responses back from ClientAliveInterval terminate the connection
 #ShowPatchLevel no
-#UseDNS yes
+#UseDNS no
 #PidFile /var/run/sshd.pid
 #MaxStartups 10:30:100
 #PermitTunnel no

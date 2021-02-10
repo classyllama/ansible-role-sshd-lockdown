@@ -57,6 +57,7 @@
     owner: root
     group: root
     mode: 0644
+    backup: yes
   become: true
   notify: restart sshd
   # only runs when ssh access group exists and current user is a member of ssh access group
